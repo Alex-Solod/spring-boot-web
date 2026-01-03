@@ -1,7 +1,6 @@
 package mate.academy.springbootweb.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 

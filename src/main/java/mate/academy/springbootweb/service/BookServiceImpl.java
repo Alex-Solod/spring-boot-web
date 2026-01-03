@@ -9,8 +9,6 @@ import mate.academy.springbootweb.model.Book;
 import mate.academy.springbootweb.repository.BookRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +34,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto createBook(CreateBookRequestDto bookDto) {
         Book book = bookMapper.toModel(bookDto);
-        book.setIsbn("ABC" + new Random().nextInt(1111));
+        bookRepository.save(book);
         return bookMapper.toDto(book);
     }
 }

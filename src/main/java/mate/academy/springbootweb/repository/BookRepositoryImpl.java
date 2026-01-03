@@ -4,8 +4,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import lombok.RequiredArgsConstructor;
-import mate.academy.springbootweb.dto.BookDto;
-import mate.academy.springbootweb.dto.CreateBookRequestDto;
 import mate.academy.springbootweb.model.Book;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -34,30 +32,16 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public BookDto createBook(CreateBookRequestDto bookDto) {
+    public Book save(Book book) {
         EntityTransaction transaction = null;
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             transaction = entityManager.getTransaction();
             transaction.begin();
 
-            Book book = new Book();
-            book.setTitle(bookDto.getTitle());
-            book.setAuthor(bookDto.getAuthor());
-            book.setPrice(bookDto.getPrice());
-            book.setDescription(bookDto.getDescription());
-            book.setCoverImage(bookDto.getCoverImage());
-
             entityManager.persist(book);
-            transaction.commit();
 
-            return new BookDto(
-                    book.getId(),
-                    book.getTitle(),
-                    book.getAuthor(),
-                    book.getPrice(),
-                    book.getDescription(),
-                    book.getCoverImage()
-            );
+            transaction.commit();
+            return book;
         } catch (RuntimeException e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
