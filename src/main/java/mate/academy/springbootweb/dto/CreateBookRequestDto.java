@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 
 @Data
 public class CreateBookRequestDto {
-    private Long id;
     private String title;
     private String author;
     private String isbn;
