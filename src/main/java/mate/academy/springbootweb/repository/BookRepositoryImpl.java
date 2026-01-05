@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import lombok.RequiredArgsConstructor;
+import mate.academy.springbootweb.exception.EntityNotFoundException;
 import mate.academy.springbootweb.model.Book;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -20,6 +21,8 @@ public class BookRepositoryImpl implements BookRepository {
             return entityManager.createQuery(
                     "SELECT b FROM Book b", Book.class)
                     .getResultList();
+        } catch (RuntimeException e) {
+            throw new EntityNotFoundException("Can't get all Books" + e);
         }
     }
 
@@ -27,14 +30,17 @@ public class BookRepositoryImpl implements BookRepository {
     public Optional<Book> getBookById(Long id) {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             Book book = entityManager.find(Book.class, id);
-            return Optional.of(book);
+            return Optional.ofNullable(book);
+        } catch (RuntimeException e) {
+            throw new EntityNotFoundException("Can't find Book by ID" + e);
         }
     }
 
     @Override
     public Book save(Book book) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = null;
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+        try {
             transaction = entityManager.getTransaction();
             transaction.begin();
 
@@ -46,7 +52,10 @@ public class BookRepositoryImpl implements BookRepository {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
-            throw e;
+            throw new EntityNotFoundException(
+                    "Can't save the Book: " + e.getMessage() + e);
+        } finally {
+            entityManager.close();
         }
     }
 }

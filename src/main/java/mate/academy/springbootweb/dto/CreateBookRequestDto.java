@@ -1,16 +1,15 @@
 package mate.academy.springbootweb.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import java.math.BigDecimal;
 
 @Data
-@AllArgsConstructor
 public class CreateBookRequestDto {
     private Long id;
     private String title;
     private String author;
     private String isbn;
-    private double price;
+    private BigDecimal price;
     private String description;
     private String coverImage;
 }

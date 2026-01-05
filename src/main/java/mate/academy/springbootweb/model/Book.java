@@ -1,10 +1,18 @@
 package mate.academy.springbootweb.model;
 
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.ToString;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+import java.math.BigDecimal;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "books")
 public class Book {
@@ -12,14 +20,20 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
+
     private String author;
 
-    @ToString.Exclude
-    @Column(name = "isbn", unique = true)
+    @Column(unique = true, nullable = false)
     private String isbn;
 
-    private double price;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
+
+    @Column(length = 2000)
     private String description;
+
+    @Column(length = 500)
     private String coverImage;
 }
