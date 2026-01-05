@@ -3,7 +3,7 @@ package mate.academy.springbootweb.service;
 import lombok.RequiredArgsConstructor;
 import mate.academy.springbootweb.dto.BookDto;
 import mate.academy.springbootweb.dto.CreateBookRequestDto;
-import mate.academy.springbootweb.exception.EntityNotFoundException;
+import mate.academy.springbootweb.exception.DataProcessingException;
 import mate.academy.springbootweb.mapper.BookMapper;
 import mate.academy.springbootweb.model.Book;
 import mate.academy.springbootweb.repository.BookRepository;
@@ -26,7 +26,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto getBookById(Long id) {
         Book book = bookRepository.getBookById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new DataProcessingException(
                         "Book with id " + id + " not found"));
         return bookMapper.toDto(book);
     }
